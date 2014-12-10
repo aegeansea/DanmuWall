@@ -18,7 +18,7 @@ $('#send').click(function(){
 	var danmu=$('#danmu').val().trim();
 	if(!danmu)return;
 	socket.emit('newdanmu',danmu);
-	$('#danmu').val('');
+	$('#danmu').val('').focus();
 });
 </script>
 <%-include footer.html%>

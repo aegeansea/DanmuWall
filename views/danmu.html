@@ -1,7 +1,7 @@
 <html lang="zh-cn">
 <head>
 <meta charset="utf-8">
-<title>DanmuShown</title>
+<title>DanmuWall</title>
 <style>
 .danmu{
 	white-space:nowrap;
@@ -28,8 +28,9 @@ function Danmu(bkdiv)
 {
 	var bk=$(bkdiv);
 	return function(s){
-		var dm=$('<span class="danmu">'+s+'</span>');
-		dm.appendTo(bkdiv);
+		var dm=$('<span class="danmu"></span>').
+		append(document.createTextNode(s)).
+		appendTo(bkdiv);
 		dm.css({
 			'left':bk.width(),
 			'top':Math.random()*(bk.height()-dm.height())
