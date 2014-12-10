@@ -1,0 +1,53 @@
+<html lang="zh-cn">
+<head>
+<meta charset="utf-8">
+<title>DanmuShown</title>
+<style>
+.danmu{
+	white-space:nowrap;
+	position:absolute;
+	font-size:32px;
+	color:white;
+	z-index:999;
+	font-family: SimHei, SimSun, Heiti, 'MS Mincho', Meiryo, 'Microsoft YaHei', monospace;
+	text-shadow: rgb(0, 0, 0) -1px 0px 0px, rgb(0, 0, 0) 0px 1px 0px, rgb(0, 0, 0) 1px 0px 0px, rgb(0, 0, 0) 0px -1px 0px;
+}
+body{
+	overflow:hidden;
+	margin:0 0 0 0;
+	background-image:url(/images/2237607.jpg);
+	background-position: center;
+}
+</style>
+<script src="/js/socket.io.js"></script>
+<script src="/js/jquery.min.js"></script>
+<head>
+<body>
+<script>
+function Danmu(bkdiv)
+{
+	var bk=$(bkdiv);
+	return function(s){
+		var dm=$('<span class="danmu">'+s+'</span>');
+		dm.appendTo(bkdiv);
+		dm.css({
+			'left':bk.width(),
+			'top':Math.random()*(bk.height()-dm.height())
+		});
+		dm.INTERVAL=setInterval(function(bk,dm){
+			var newleft=parseInt(dm.css('left'))-1;
+			if(newleft+dm.width()<0)
+				clearInterval(dm.INTERVAL);
+			else
+				dm.css('left',newleft);
+		},1,bk,dm);
+	};
+}
+var SendDanmu=Danmu('body');
+var socket = io();
+socket.on('danmu', function (data) {
+SendDanmu(data);
+});
+</script>
+</body>
+<html>
