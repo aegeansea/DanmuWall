@@ -5,8 +5,5 @@ var router = express.Router();
 router.get('/', function(req, res) {
   res.render('index', { title: 'Express' });
 });
-router.post('/', function(req, res) {
-  if(req.body.danmu)router.io.emit('danmu',req.body.danmu);
-  res.redirect('/');
-});
+
 module.exports = router;

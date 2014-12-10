@@ -58,6 +58,10 @@ app.use(function(err, req, res, next) {
 });
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
+io.on('connection', function (socket) {
+	socket.on('newdanmu',function(data){
+		io.emit('danmu',data);
+	});
+});
 server.listen(9876);
-routes.io=io;
 module.exports = app;

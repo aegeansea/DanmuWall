@@ -1,13 +1,24 @@
 <%-include header.html%>
+<script src="/js/socket.io.js"></script>
 <h4>弹幕内容</h4>
-<form method="post">
-<input name="danmu" class="form-control"></input>
+<input id="danmu" class="form-control"></input>
 <br>
-<button type="button" class="btn btn-default">清空内容</button>
-<button class="btn btn-default">发送弹幕</button>
-</form>
+<button class="btn btn-default">清空内容</button>
+<button id="send" class="btn btn-default">发送弹幕</button>
 <br>
+
 <script>
+var socket = io();
 $('[name=danmu]').focus();
+$('#danmu').keydown(function(e){
+	if(e.keyCode==13)$('#send').click();
+});
+
+$('#send').click(function(){
+	var danmu=$('#danmu').val().trim();
+	if(!danmu)return;
+	socket.emit('newdanmu',danmu);
+	$('#danmu').val('');
+});
 </script>
 <%-include footer.html%>
