@@ -11,6 +11,7 @@
 	z-index:999;
 	font-family: SimHei, SimSun, Heiti, 'MS Mincho', Meiryo, 'Microsoft YaHei', monospace;
 	text-shadow: rgb(0, 0, 0) -1px 0px 0px, rgb(0, 0, 0) 0px 1px 0px, rgb(0, 0, 0) 1px 0px 0px, rgb(0, 0, 0) 0px -1px 0px;
+	-webkit-animation: dmfly 2s linear forwards;
 }
 body{
 	overflow:hidden;
@@ -18,12 +19,47 @@ body{
 	/*background-image:url(/images/2237607.jpg);*/
 	background-image:url(http://i3.tietuku.com/0d72f136dcb60943.jpg);
 }
+@-webkit-keyframes dmfly{
+	100% {-webkit-transform: translate(-100%); }
+}
+
 </style>
 <script src="/js/socket.io.js"></script>
 <script src="/js/jquery.min.js"></script>
 <head>
 <body>
 <script>
+window.requestAnimFrame = (function(){  
+        return  window.requestAnimationFrame       ||   
+        window.webkitRequestAnimationFrame ||   
+        window.mozRequestAnimationFrame    ||   
+        window.oRequestAnimationFrame      ||   
+        window.msRequestAnimationFrame     ||   
+        function( callback ){  
+            window.setTimeout(callback, 1000/60);  
+        };  
+})();
+var __lasttime=new Date;
+var SPEED=10;
+function UpdateDanmu(){
+	var nowtime=new Date;
+	var delta=nowtime-__lasttime;
+	var danmus=$('.danmu');
+	for(var i=0;i<danmus.length;i++)
+	{
+		var dm=$(danmus[i]);
+		var newleft=parseFloat(dm.css('left'))-SPEED;
+		
+		if(newleft+dm.width()<0)
+			dm.remove();
+		else
+			dm.css('left',newleft);
+	}
+	__lasttime=new Date;
+	requestAnimFrame(UpdateDanmu);
+}
+//requestAnimFrame(UpdateDanmu);
+var transforms=['-moz-transform','-webkit-transform','-o-transform','-ms-transform','transform'];
 function Danmu(bkdiv)
 {
 	var bk=$(bkdiv);
@@ -31,20 +67,13 @@ function Danmu(bkdiv)
 		var dm=$('<span class="danmu"></span>').
 		append(document.createTextNode(s)).
 		appendTo(bkdiv);
+		var csss={};
+		
 		dm.css({
-			'left':bk.width(),
-			'top':Math.random()*(bk.height()-dm.height())
+			top:Math.random()*(bk.height()-dm.height()),
+			left:bk.width(),
+			width:bk.width()+dm.width()
 		});
-		dm.INTERVAL=setInterval(function(bk,dm){
-			var newleft=parseInt(dm.css('left'))-1;
-			if(newleft+dm.width()<0)
-			{
-				clearInterval(dm.INTERVAL);
-				dm.remove();
-			}
-			else
-				dm.css('left',newleft);
-		},1,bk,dm);
 	};
 }
 var SendDanmu=Danmu('body');
