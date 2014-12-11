@@ -66,9 +66,13 @@ $('#send').click(function(){
 	}
 	socket.emit('newdanmu',{
 		color:color,
-		danmu:danmu
+		danmu:danmu.substr(0,120)
 	});
-	$('#danmu').val('').focus();
+	$('#danmu').attr("disabled",true);
+	setTimeout(function(){
+		$('#danmu').attr("disabled",false).val('').focus();
+	},1000);
+	
 });
 </script>
 <hr>
