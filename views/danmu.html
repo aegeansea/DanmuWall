@@ -23,7 +23,6 @@
 	color:white;
 	z-index:999;
 	font-family: SimHei, SimSun, Heiti, 'MS Mincho', Meiryo, 'Microsoft YaHei', monospace;
-	text-shadow: rgb(0, 0, 0) -1px 0px 0px, rgb(0, 0, 0) 0px 1px 0px, rgb(0, 0, 0) 1px 0px 0px, rgb(0, 0, 0) 0px -1px 0px;
 	-webkit-animation: dmfly 2s linear forwards;
 	-moz-animation: dmfly 2s linear forwards;
 	-o-animation: dmfly 2s linear forwards;
@@ -47,12 +46,15 @@ function Danmu(bkdiv)
 	var bk=$(bkdiv);
 	return function(s){
 		var dm=$('<span class="danmu"></span>').
-		append(document.createTextNode(s)).
+		append(document.createTextNode(s.danmu)).
 		appendTo(bkdiv);
+		var rcolor=s.color=='white'?'rgb(0,0,0)':'rbg(255,255,255)';
 		dm.css({
 			top:Math.random()*(bk.height()-dm.height()),
 			left:bk.width(),
-			width:bk.width()+dm.width()
+			width:bk.width()+dm.width(),
+			color:s.color,
+			'text-shadow': rcolor+' -1px 0px 0px, '+rcolor+' 0px 1px 0px, '+rcolor+' 1px 0px 0px, '+rcolor+' 0px -1px 0px'
 		});
 	};
 }

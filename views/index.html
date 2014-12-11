@@ -1,23 +1,61 @@
 <%-include header.html%>
-<script src="/js/socket.io.js"></script>
-<h4>弹幕内容</h4>
-<input id="danmu" class="form-control"></input>
-<br>
-<button class="btn btn-default">清空内容</button>
-<button id="send" class="btn btn-default">发送弹幕</button>
-<br>
+<style>
+.colorblock{
+	width:60px;
+	height:60px;
+	display:inline-block;
+	border-radius:4px;
+	border: 1px solid #ccc;
+}
 
+.colorblock.active{
+  border-color: #66afe9;
+  outline: 0;
+  -webkit-box-shadow: inset 0 px 1px rgba(0,0,0,.075), 0 0 20px rgba(102, 175, 233, .6);
+          box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 20px rgba(102, 175, 233, .6);
+}
+</style>
+<span data-color="white" class="colorblock active"></span>
+<span data-color="black" class="colorblock"></span>
+<span data-color="#d9534f" class="colorblock"></span>
+<span data-color="#5cb85c" class="colorblock"></span>
+<span data-color="#428bca" class="colorblock"></span>
+<span data-color="#5bc0de" class="colorblock"></span>
+<span data-color="#f0ad4e" class="colorblock"></span>
+<span data-color="#777" class="colorblock"></span>
+
+<div class="input-group">
+  <input id="danmu" type="text" class="form-control">
+  <span class="input-group-btn">
+	<button id="send" class="btn btn-default" type="button">发送</button>
+  </span>
+</div>
+<script src="/js/socket.io.js"></script>
 <script>
 var socket = io();
 $('[name=danmu]').focus();
 $('#danmu').keydown(function(e){
 	if(e.keyCode==13)$('#send').click();
 });
-
+var __danmu_color=$('.colorblock.active');
+$('[data-color]').each(function(){
+	var jthis=$(this);
+	var data_color=jthis.attr('data-color');
+	
+	jthis.css('background-color',data_color)
+		 .click(function(){
+			__danmu_color.removeClass('active');
+			__danmu_color=$(this).addClass('active');
+			$('#danmu').focus();
+		 });
+});
 $('#send').click(function(){
 	var danmu=$('#danmu').val().trim();
 	if(!danmu)return;
-	socket.emit('newdanmu',danmu);
+	socket.emit('newdanmu',{
+		color:__danmu_color.attr('data-color'),
+		danmu:danmu
+	});
 	$('#danmu').val('').focus();
 });
 </script>
