@@ -3,6 +3,19 @@
 <meta charset="utf-8">
 <title>DanmuWall</title>
 <style>
+@-webkit-keyframes dmfly{
+	100% {-webkit-transform: translate(-100%); }
+}
+@-moz-keyframes dmfly{
+	100% {-moz-transform: translate(-100%); }
+}
+@-o-keyframes dmfly{
+	100% {-o-transform: translate(-100%); }
+}
+@keyframes dmfly{
+	100% {transform: translate(-100%); }
+}
+
 .danmu{
 	white-space:nowrap;
 	position:absolute;
@@ -12,15 +25,15 @@
 	font-family: SimHei, SimSun, Heiti, 'MS Mincho', Meiryo, 'Microsoft YaHei', monospace;
 	text-shadow: rgb(0, 0, 0) -1px 0px 0px, rgb(0, 0, 0) 0px 1px 0px, rgb(0, 0, 0) 1px 0px 0px, rgb(0, 0, 0) 0px -1px 0px;
 	-webkit-animation: dmfly 2s linear forwards;
+	-moz-animation: dmfly 2s linear forwards;
+	-o-animation: dmfly 2s linear forwards;
+	animation: dmfly 2s linear forwards;
 }
 body{
 	overflow:hidden;
 	margin:0 0 0 0;
 	/*background-image:url(/images/2237607.jpg);*/
 	background-image:url(http://i3.tietuku.com/0d72f136dcb60943.jpg);
-}
-@-webkit-keyframes dmfly{
-	100% {-webkit-transform: translate(-100%); }
 }
 
 </style>
@@ -29,37 +42,6 @@ body{
 <head>
 <body>
 <script>
-window.requestAnimFrame = (function(){  
-        return  window.requestAnimationFrame       ||   
-        window.webkitRequestAnimationFrame ||   
-        window.mozRequestAnimationFrame    ||   
-        window.oRequestAnimationFrame      ||   
-        window.msRequestAnimationFrame     ||   
-        function( callback ){  
-            window.setTimeout(callback, 1000/60);  
-        };  
-})();
-var __lasttime=new Date;
-var SPEED=10;
-function UpdateDanmu(){
-	var nowtime=new Date;
-	var delta=nowtime-__lasttime;
-	var danmus=$('.danmu');
-	for(var i=0;i<danmus.length;i++)
-	{
-		var dm=$(danmus[i]);
-		var newleft=parseFloat(dm.css('left'))-SPEED;
-		
-		if(newleft+dm.width()<0)
-			dm.remove();
-		else
-			dm.css('left',newleft);
-	}
-	__lasttime=new Date;
-	requestAnimFrame(UpdateDanmu);
-}
-//requestAnimFrame(UpdateDanmu);
-var transforms=['-moz-transform','-webkit-transform','-o-transform','-ms-transform','transform'];
 function Danmu(bkdiv)
 {
 	var bk=$(bkdiv);
@@ -67,8 +49,6 @@ function Danmu(bkdiv)
 		var dm=$('<span class="danmu"></span>').
 		append(document.createTextNode(s)).
 		appendTo(bkdiv);
-		var csss={};
-		
 		dm.css({
 			top:Math.random()*(bk.height()-dm.height()),
 			left:bk.width(),
