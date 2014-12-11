@@ -6,24 +6,30 @@
 	display:inline-block;
 	border-radius:4px;
 	border: 1px solid #ccc;
+	vertical-align: top;
+	text-align:center;
 }
 
 .colorblock.active{
   border-color: #66afe9;
   outline: 0;
-  -webkit-box-shadow: inset 0 px 1px rgba(0,0,0,.075), 0 0 20px rgba(102, 175, 233, .6);
-          box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 20px rgba(102, 175, 233, .6);
+  -webkit-box-shadow: inset 0 px 1px rgba(0,0,0,.075), 0 0 20px rgb(102, 195, 253);
+          box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 20px rgb(102, 195, 253);
 }
 </style>
-<span data-color="white" class="colorblock active"></span>
-<span data-color="black" class="colorblock"></span>
-<span data-color="#d9534f" class="colorblock"></span>
-<span data-color="#5cb85c" class="colorblock"></span>
-<span data-color="#428bca" class="colorblock"></span>
-<span data-color="#5bc0de" class="colorblock"></span>
-<span data-color="#f0ad4e" class="colorblock"></span>
-<span data-color="#777" class="colorblock"></span>
-
+<div>
+<span data-color="random" class="colorblock active">
+<span style="display:block;height:4em;line-height:4em;">随机</span>
+</span>
+<span data-color="white" class="colorblock"></span>
+<span data-color="#FFFF00" class="colorblock"></span>
+<span data-color="#FF9900" class="colorblock"></span>
+<span data-color="#FF3300" class="colorblock"></span>
+<span data-color="#66FF66" class="colorblock"></span>
+<span data-color="#33CCFF" class="colorblock"></span>
+<span data-color="#6633CC" class="colorblock"></span>
+</div>
+<br>
 <div class="input-group">
   <input id="danmu" type="text" class="form-control">
   <span class="input-group-btn">
@@ -52,11 +58,18 @@ $('[data-color]').each(function(){
 $('#send').click(function(){
 	var danmu=$('#danmu').val().trim();
 	if(!danmu)return;
+	var color=__danmu_color.attr('data-color');
+	if(color=='random')
+	{
+		var colorblock=$('[data-color]');
+		color=$(colorblock[parseInt(Math.random()*(colorblock.length-1))+1]).attr('data-color');
+	}
 	socket.emit('newdanmu',{
-		color:__danmu_color.attr('data-color'),
+		color:color,
 		danmu:danmu
 	});
 	$('#danmu').val('').focus();
 });
 </script>
+<hr>
 <%-include footer.html%>
